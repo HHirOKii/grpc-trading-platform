@@ -1,0 +1,34 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // proto モジュール
+    implementation project(':proto')
+
+    // Spring Web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // gRPC client
+    implementation 'net.devh:grpc-client-spring-boot-starter'
+
+    // proto <-> JSON 用
+    implementation "com.google.protobuf:protobuf-java-util"
+
+    // test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'net.devh:grpc-server-spring-boot-starter'
+}
+
+test {
+    useJUnitPlatform()
+}

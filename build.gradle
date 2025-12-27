@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.0'
+    id 'io.spring.dependency-management' version '1.1.5'
+}
+
+// Maven の <properties> 部分
+ext {
+    javaVersion = 17
+    grpcJavaVersion = '1.58.0'
+    tomcatAnnotationsVersion = '6.0.53'
+    protocVersion = '3.25.1'
+    protobufMavenPluginVersion = '0.6.1'
+    osMavenPluginVersion = '1.7.1'
+    grpcSpringVersion = '3.1.0.RELEASE'
+    protobufJavaUtilVersion = '3.25.4'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(javaVersion)
+    }
+}
+
+subprojects {
+
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+
+    group = 'com.example'
+    version = '0.0.1-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
+
+    // dependencyManagement 相当
+    dependencyManagement {
+        dependencies {
+            dependency "com.example:proto:${version}"
+            dependency "net.devh:grpc-server-spring-boot-starter:${grpcSpringVersion}"
+            dependency "net.devh:grpc-client-spring-boot-starter:${grpcSpringVersion}"
+            dependency "com.google.protobuf:protobuf-java-util:${protobufJavaUtilVersion}"
+            dependency "io.grpc:grpc-testing:${grpcJavaVersion}"
+        }
+    }
+}

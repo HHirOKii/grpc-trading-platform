@@ -1,0 +1,64 @@
+plugins {
+    id 'java'
+    id 'com.google.protobuf' version '0.9.4'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+/**
+ * Maven の <properties> spring-boot.repackage.skip=true 相当
+ * → Spring Boot 用の fat-jar を作らない
+ */
+//tasks.named('bootJar').configure { enabled = false }
+tasks.named('jar').configure { enabled = true }
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "io.grpc:grpc-protobuf:${grpcJavaVersion}"
+    implementation "io.grpc:grpc-stub:${grpcJavaVersion}"
+
+    // Java 9+ 用 provided 依存関係
+    compileOnly "org.apache.tomcat:annotations-api:${tomcatAnnotationsVersion}"
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:${protocVersion}"
+    }
+    plugins {
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:${grpcJavaVersion}"
+        }
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.plugins {
+                grpc {}
+            }
+        }
+    }
+
+    // プロトファイルのルート
+    // (Maven の <protoSourceRoot> と同じ)
+    generatedFilesBaseDir = "$projectDir/build/generated"
+}
+
+sourceSets {
+    main {
+        proto {
+            srcDir 'src/main/proto'
+        }
+        java {
+            srcDir "$projectDir/build/generated/source/proto/main/java"
+            srcDir "$projectDir/build/generated/source/proto/main/grpc"
+        }
+    }
+}
+
+processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}

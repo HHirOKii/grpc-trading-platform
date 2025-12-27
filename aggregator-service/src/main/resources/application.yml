@@ -1,0 +1,11 @@
+# user-service
+grpc:
+  client:
+    user-service:
+      address: static://localhost:6565
+      negotiationType: PLAINTEXT
+
+    # stock-service
+    stock-service:
+      address: static://localhost:7576
+      negotiationType: PLAINTEXT

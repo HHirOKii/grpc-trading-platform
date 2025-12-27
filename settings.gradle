@@ -1,0 +1,5 @@
+include 'proto', 'user-service', 'aggregator-service'
+rootProject.name = 'grpc-trading-platform'
+include 'proto'
+include 'user-service'
+include 'aggregator-service'
